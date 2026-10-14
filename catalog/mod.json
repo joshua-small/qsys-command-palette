@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "command-palette",
+  "name": "Command Palette",
+  "description": "Search and run Q-SYS Designer and mod commands with Ctrl+Shift+P. Includes fuzzy search, current shortcuts, availability, keyboard navigation, and recent commands.",
+  "author": "joshua-small",
+  "helpUrl": "https://github.com/joshua-small/qsys-command-palette",
+  "thumbnail": "catalog/artwork/avitex.ico"
+}

@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0-windows</TargetFramework><UseWPF>true</UseWPF><EnableWindowsTargeting>true</EnableWindowsTargeting><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../PaletteSearch.cs" Link="PaletteSearch.cs" /><Compile Include="../../PaletteInvocation.cs" Link="PaletteInvocation.cs" />
+    <Compile Include="../../PaletteContext.cs" Link="PaletteContext.cs" /><Compile Include="../../PaletteWindow.cs" Link="PaletteWindow.cs" />
+  </ItemGroup>
+</Project>

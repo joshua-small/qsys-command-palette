@@ -1,0 +1,17 @@
+{
+  "id": "command-palette",
+  "name": "Command Palette",
+  "repository": "joshua-small/qsys-command-palette",
+  "module": "Designer.Modules.CommandPalette.dll",
+  "legacyMarker": null,
+  "layouts": [
+    {
+      "schema": 3,
+      "minimumVersion": "0.1.0",
+      "beforeVersion": "0.2.0",
+      "files": [{ "name": "Designer.Modules.CommandPalette.dll", "shared": false, "sha256": null }],
+      "dependencies": [{ "id": "mods-core", "minimum": "0.1.4", "before": "0.2.0" }],
+      "conflicts": [{ "id": "schematic-tools", "minimum": "0.0.0", "before": "0.17.0" }]
+    }
+  ]
+}
