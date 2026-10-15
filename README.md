@@ -34,20 +34,20 @@ arbitrary reflection methods and click-only menu handlers are not commands.
 The native dialogs, confirmation prompts, and undo behavior of an action remain
 that action's responsibility.
 
-## Candidate status
+## Install
 
-Version **0.1.0** is a local development candidate for the inspected Designer
-**10.5.0.0** build. Core checks the exact Designer and ModuleCommon hashes before
+Version **0.1.0** targets the inspected Designer **10.5.0.0** build.
+Core checks the exact Designer and ModuleCommon hashes before
 initialization. No vendor DLL is modified or included in the package.
 
-This repository has not been published, and the new mod identity has not been
-approved in the signed QMM catalog. `catalog/approval-proposal.json` is a proposal
-for onboarding, not an installed approval. The locally verified `.qdsmod` is
-not yet importable through the normal signed catalog. No change has been made
-to the regular Designer installation.
+Use Q-SYS Mod Manager 0.8 or newer, refresh its catalog, and install **Command
+Palette** with the required Core dependency. Close Designer before applying the
+installation, then reopen it and press Ctrl+Shift+P. QMM preserves profile pins,
+backups, and an undoable installation record. The signed catalog is the authority
+for approved layouts; `catalog/approval-proposal.json` records this mod's request.
 
-Proposed repository: `joshua-small/qsys-command-palette`. The help URL in the
-presentation metadata is reserved for that future repository. Existing planning:
+Source: [joshua-small/qsys-command-palette](https://github.com/joshua-small/qsys-command-palette).
+Existing planning:
 [Better Shortcuts #4](https://github.com/joshua-small/qsys-better-shortcuts/issues/4)
 and [Mods Core #4](https://github.com/joshua-small/qsys-mods-core/issues/4).
 
@@ -76,10 +76,10 @@ and a blank design. It is never shipped in the palette package. See
 The payload contains only `Designer.Modules.CommandPalette.dll`. The schema-3
 layout declares `mods-core >= 0.1.4, < 0.2.0` and conflicts with the legacy
 Schematic Tools bundle before 0.17. The consumer does not ship another Core
-runtime or Harmony copy. The proposed layout follows the
+runtime or Harmony copy. The layout follows the
 [QMM package contract](https://github.com/joshua-small/qsys-mod-catalog/blob/main/PACKAGE-CONTRACT.md).
 
-Before distribution, onboard the identity/layout, create the source repository,
-pin the reviewed publisher workflow, and validate source/artwork provenance at
-the release commit. Local packaging verification does not approve publication
-or installation.
+The publisher is pinned to the catalog's reviewed tooling revision. Stable
+releases contain one verified package and an immutable catalog descriptor.
+The collector checks source/artwork provenance before adding the release to the
+signed feed. Local package checks alone do not establish catalog publication.
