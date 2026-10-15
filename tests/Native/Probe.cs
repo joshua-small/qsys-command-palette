@@ -22,6 +22,12 @@ public sealed class Probe : IDesignerModule
     private DispatcherTimer? timer;
     private int attempts;
     private readonly List<string> checks = new();
+    // Supplies modifier state to a WPF routed event without sending OS input.
+    private sealed class PaletteKeyboard() : KeyboardDevice(InputManager.Current)
+    {
+        protected override KeyStates GetKeyStatesFromSystem(Key key) =>
+            key is Key.LeftCtrl or Key.LeftShift ? KeyStates.Down : KeyStates.None;
+    }
     public string Description => "Command Palette isolated acceptance probe";
     public string MenuTitle => "Palette lab probe";
     public string Parent => "mainMenu_Tools";
@@ -65,9 +71,23 @@ public sealed class Probe : IDesignerModule
             main.Activate(); main.Focus(); await Idle();
             var open = Commands.All.Single(c => c.Definition.Id == "command-palette/open");
             Check(ModControls.Bindings.Display(open.Definition.Id, ModControls.Current.Bindings.Overrides) == "Ctrl+Shift+P", "Reserved default from Core binding engine");
-            Check(main.InputBindings.OfType<KeyBinding>().Count(b => b.Key == Key.P && b.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) && ReferenceEquals(b.Command, open.Command)) == 1, "One main-window input binding");
             Check(open.Command.CanExecute(null, main), "Open command available");
-            open.Command.Execute(null, main); await Idle();
+            var inputs = main.InputBindings.OfType<KeyBinding>().Where(b => b.Key == Key.P && b.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift)).ToArray();
+            if (typeof(ControlBindings).Assembly.GetName().Version! < new Version(0, 1, 5, 0))
+            {
+                Check(inputs.Length == 1 && ReferenceEquals(inputs[0].Command, open.Command), "One legacy main-window input binding");
+                open.Command.Execute(null, main);
+            }
+            else
+            {
+                Check(inputs.Length == 0, "Core preview routing has no duplicate direct binding");
+                var keyboard = new PaletteKeyboard();
+                var down = new KeyEventArgs(keyboard, PresentationSource.FromVisual(main), Environment.TickCount, Key.P) { RoutedEvent = Keyboard.PreviewKeyDownEvent };
+                main.RaiseEvent(down);
+                main.RaiseEvent(new KeyEventArgs(keyboard, PresentationSource.FromVisual(main), Environment.TickCount, Key.P) { RoutedEvent = Keyboard.PreviewKeyUpEvent });
+                Check(down.Handled, "Core handles synthetic Ctrl+Shift+P through its real preview route");
+            }
+            await Idle();
             var window = Palette();
             Check(window.Results.Items.Count > 50, "Native registry populated");
             Check(ReferenceEquals(Keyboard.FocusedElement, window.Search), "Native palette search focus");
